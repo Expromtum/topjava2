@@ -1,12 +1,12 @@
 package ru.javawebinar.topjava;
 
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.to.MealTo;
 
 import java.time.Month;
 import java.util.List;
 
 import static java.time.LocalDateTime.of;
-import static org.assertj.core.api.Assertions.assertThat;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class MealTestData {
@@ -25,7 +25,7 @@ public class MealTestData {
 
     public static final List<Meal> MEALS = List.of(MEAL7, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
 
-    public static Meal getCreated() {
+    public static Meal getNew() {
         return new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Созданный ужин", 300);
     }
 
@@ -33,15 +33,6 @@ public class MealTestData {
         return new Meal(MEAL1_ID, MEAL1.getDateTime(), "Обновленный завтрак", 200);
     }
 
-    public static void assertMatch(Meal actual, Meal expected) {
-        assertThat(actual).isEqualToIgnoringGivenFields(expected, "user");
-    }
-
-    public static void assertMatch(Iterable<Meal> actual, Meal... expected) {
-        assertMatch(actual, List.of(expected));
-    }
-
-    public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) {
-        assertThat(actual).usingElementComparatorIgnoringFields("user").isEqualTo(expected);
-    }
+    public static TestMatchers<Meal> MEAL_MATCHERS = TestMatchers.useFieldsComparator(Meal.class, "user");
+    public static TestMatchers<MealTo> MEAL_TO_MATCHERS = TestMatchers.useEquals(MealTo.class);
 }
